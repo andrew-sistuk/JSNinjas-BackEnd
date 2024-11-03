@@ -26,6 +26,8 @@ export const getAllCharactersController = async (req, res) => {
 export const getCharacterByIDController = async (req, res, _next) => {
   const { characterId } = req.params;
 
+  console.log(characterId);
+
   const character = await getCharacterByID(characterId);
 
   if (!character) {
