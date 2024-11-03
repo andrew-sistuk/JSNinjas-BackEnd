@@ -1,5 +1,6 @@
 import { charactersCollection } from '../db/models/characters.js';
 import { calculatePaginationData } from '../utils/calculatePaginationData.js';
+import mongoose from 'mongoose';
 
 export const getAllCharacters = async ({ page, perPage }) => {
   const limit = perPage;
@@ -32,17 +33,13 @@ export const createCharacter = async (payload) => {
 };
 
 export const upsertCharacter = async (filter, payload, options = {}) => {
-  console.log('---------------------', filter, payload);
-  const rawCharacter = charactersCollection.findOneAndUpdate(
+  const rawCharacter = await charactersCollection.findOneAndUpdate(
     filter,
     payload,
-    {returnNewDocument: true,  new: true, includeResultMetadata: true, validateBeforeSave: false, ...options },
+    {new: true, includeResultMetadata: true,  ...options },
   );
 
-  console.log("++++++++++++++++++", rawCharacter);
-
   if (!rawCharacter || !rawCharacter.value) return null;
-  console.log("Yesssss0000000");
 
   return {
     character: rawCharacter.value,

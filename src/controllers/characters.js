@@ -52,10 +52,7 @@ export const createCharacterController = async (req, res) => {
 export const patchCharacterController = async (req, res, next) => {
   const { characterId } = req.params;
 
-  const result = await upsertCharacter(
-    { _id: characterId },
-    req.body,
-  );
+  const result = await upsertCharacter({ _id: characterId }, req.body);
 
   if (!result) {
     next(createHttpError(404, 'Character not found'));

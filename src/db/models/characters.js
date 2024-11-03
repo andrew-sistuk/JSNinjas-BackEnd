@@ -2,7 +2,6 @@ import { model, Schema } from 'mongoose';
 
 const charactersSchema = new Schema(
   {
-    _id: String,
     nickname: {
       type: String,
       required: true,
