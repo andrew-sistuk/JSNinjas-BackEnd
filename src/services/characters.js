@@ -1,6 +1,5 @@
 import { charactersCollection } from '../db/models/characters.js';
 import { calculatePaginationData } from '../utils/calculatePaginationData.js';
-import mongoose from 'mongoose';
 
 export const getAllCharacters = async ({ page, perPage }) => {
   const limit = perPage;
