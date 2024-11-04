@@ -43,9 +43,21 @@ export const getCharacterByIDController = async (req, res, _next) => {
 };
 
 export const createCharacterController = async (req, res) => {
-  const character = await createCharacter(req.body);
-  // const photo = req;
-  // console.log('*********', photo);
+  const photos = req.files;
+
+  let photoUrls = [] ;
+
+  if (photos && photos.length > 0) {
+    for (const file of photos) {
+      const photoUrl = await saveFileToUploadDir(file);
+      photoUrls.push(photoUrl);
+    }
+  }
+
+  const character = await createCharacter( {
+    ...req.body,
+    images: photoUrls,
+  });
 
   res.status(201).json({
     status: 201,
@@ -58,8 +70,14 @@ export const patchCharacterController = async (req, res, next) => {
   const { characterId } = req.params;
 
   const photos = req.files;
+  const item = await getCharacterByID(characterId);
 
-  let photoUrls = [];
+  if (!item) {
+    next(createHttpError(404, 'Character not found'));
+    return;
+  }
+
+  let photoUrls = item.images ? item.images : [] ;
 
   if (photos && photos.length > 0) {
     for (const file of photos) {
@@ -67,17 +85,11 @@ export const patchCharacterController = async (req, res, next) => {
       photoUrls.push(photoUrl);
     }
   }
-  console.log('*********', photoUrls);
 
   const result = await upsertCharacter({ _id: characterId }, {
     ...req.body,
     images: photoUrls,
   });
-
-  if (!result) {
-    next(createHttpError(404, 'Character not found'));
-    return;
-  }
 
   res.status(200).json({
     status: 200,
