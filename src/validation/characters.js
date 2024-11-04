@@ -25,7 +25,7 @@ export const createCharacterSchema = Joi.object({
     'string.base': '#label should be a string',
     'any.required': '#label is required',
   }),
-  image: Joi.array().messages({
+  images: Joi.array().messages({
     'array.base': '#label should be a string',
   }),
 });

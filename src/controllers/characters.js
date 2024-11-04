@@ -7,6 +7,7 @@ import {
 } from '../services/characters.js';
 import createHttpError from 'http-errors';
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
+import { saveFileToUploadDir } from '../utils/saveFileToUploadDir.js';
 
 export const getAllCharactersController = async (req, res) => {
   const { page, perPage } = parsePaginationParams(req.query);
@@ -43,6 +44,8 @@ export const getCharacterByIDController = async (req, res, _next) => {
 
 export const createCharacterController = async (req, res) => {
   const character = await createCharacter(req.body);
+  // const photo = req;
+  // console.log('*********', photo);
 
   res.status(201).json({
     status: 201,
@@ -54,7 +57,22 @@ export const createCharacterController = async (req, res) => {
 export const patchCharacterController = async (req, res, next) => {
   const { characterId } = req.params;
 
-  const result = await upsertCharacter({ _id: characterId }, req.body);
+  const photos = req.files;
+
+  let photoUrls = [];
+
+  if (photos && photos.length > 0) {
+    for (const file of photos) {
+      const photoUrl = await saveFileToUploadDir(file);
+      photoUrls.push(photoUrl);
+    }
+  }
+  console.log('*********', photoUrls);
+
+  const result = await upsertCharacter({ _id: characterId }, {
+    ...req.body,
+    images: photoUrls,
+  });
 
   if (!result) {
     next(createHttpError(404, 'Character not found'));

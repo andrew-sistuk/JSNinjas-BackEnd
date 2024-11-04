@@ -18,9 +18,9 @@ router.get('/characters', ctrlWrapper(getAllCharactersController));
 
 router.get('/characters/:characterId', isValidId, ctrlWrapper(getCharacterByIDController));
 
-router.post('/characters', validateBody(createCharacterSchema), upload.array('images', 10), ctrlWrapper(createCharacterController));
+router.post('/characters', upload.array('images', 10), validateBody(createCharacterSchema), ctrlWrapper(createCharacterController));
 
-router.patch('/characters/:characterId', isValidId, validateBody(updateCharacterSchema), upload.array('images', 10), ctrlWrapper(patchCharacterController));
+router.patch('/characters/:characterId', isValidId, upload.array('images', 10), validateBody(updateCharacterSchema), ctrlWrapper(patchCharacterController));
 
 router.delete(
   '/characters/:characterId',

@@ -5,11 +5,14 @@ import env from './utils/env.js';
 import charactersRouter from './routers/characters.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import { errorHandler } from './middlewares/errorHandler.js';
+import { UPLOAD_DIR } from './constants/characters.js';
 
 const PORT = Number(env('PORT', 3004));
 
 export default function startServer() {
   const app = express();
+
+  app.use('/uploads', express.static(UPLOAD_DIR));
 
   app.use(
     express.json({
