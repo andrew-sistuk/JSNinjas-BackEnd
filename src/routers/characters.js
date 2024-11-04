@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import {
   createCharacterController,
-  deleteCharacterController,
+  deleteCharacterController, deleteCharacterImageController,
   getAllCharactersController,
   getCharacterByIDController,
   patchCharacterController,
@@ -25,6 +25,11 @@ router.patch('/characters/:characterId', isValidId, upload.array('images', 10), 
 router.delete(
   '/characters/:characterId',
   ctrlWrapper(deleteCharacterController),
+);
+
+router.delete(
+  '/characters/img/:characterId/:img',
+  ctrlWrapper(deleteCharacterImageController),
 );
 
 export default router;

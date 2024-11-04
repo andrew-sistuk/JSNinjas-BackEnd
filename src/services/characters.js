@@ -49,3 +49,9 @@ export const upsertCharacter = async (filter, payload, options = {}) => {
 export const deleteCharacter = async (id) => {
   return charactersCollection.findOneAndDelete({ _id: id });
 };
+
+export const deleteCharacterImg = async (id, img) => {
+  return charactersCollection.updateOne(
+    { _id: id },
+    { $pull: { images: { $regex: img, $options: 'i' } } }  );
+};

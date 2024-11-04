@@ -1,6 +1,6 @@
 import {
   createCharacter,
-  deleteCharacter,
+  deleteCharacter, deleteCharacterImg,
   getAllCharacters,
   getCharacterByID,
   upsertCharacter,
@@ -102,6 +102,20 @@ export const deleteCharacterController = async (req, res, next) => {
   const { characterId } = req.params;
 
   const character = await deleteCharacter(characterId);
+
+  if (!character) {
+    next(createHttpError(404, 'Character not found'));
+    return;
+  }
+
+  res.status(204).send();
+};
+
+// тут насправді мало б бути оновлення))
+export const deleteCharacterImageController = async (req, res, next) => {
+  const { characterId, img } = req.params;
+
+  const character = await deleteCharacterImg(characterId, img);
 
   if (!character) {
     next(createHttpError(404, 'Character not found'));
